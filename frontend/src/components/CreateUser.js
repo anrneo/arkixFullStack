@@ -7,7 +7,7 @@ export default class CreateUser extends Component {
         username: '',
         email: '',
         password: '',
-        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com/',
+        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com',
         users: []
     }
 

@@ -12,7 +12,7 @@ export default class CreateNote extends Component {
         content: '',
         imagen: '',
         pathfile: '',
-        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com/',
+        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com',
         date: new Date(),
         userSelected: '',
         users: [],

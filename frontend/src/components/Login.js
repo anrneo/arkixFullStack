@@ -8,7 +8,7 @@ export default class Login extends Component {
         name: '',
         email: '',
         password: '',
-        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com/',
+        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com',
         date: new Date(),
         userSelected: '',
         users: [],
