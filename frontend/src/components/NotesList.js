@@ -9,7 +9,8 @@ export default class NotesList extends Component {
 
     state = {
         notes: [], 
-        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com',
+        //url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com',
+        url: 'https://arkixfullstack.herokuapp.com',
         user:''
     }
 

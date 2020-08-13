@@ -12,7 +12,8 @@ export default class CreateNote extends Component {
         content: '',
         imagen: '',
         pathfile: '',
-        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com',
+        //url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com',
+        url: 'https://arkixfullstack.herokuapp.com',
         date: new Date(),
         userSelected: '',
         users: [],
@@ -80,7 +81,7 @@ export default class CreateNote extends Component {
                 date: this.state.date,
                 imagen: this.state.imagen
             };
-            axios.post(this.state.url+'/api/notes', newNote, {
+            await axios.post(this.state.url+'/api/notes', newNote, {
                 headers: {
                   Authorization: localStorage.getItem('token')
                 }
