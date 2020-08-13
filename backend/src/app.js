@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken')
 const cors = require('cors');
-
+const path = require('path');
 const app = express();
 
 // settings
@@ -14,6 +14,14 @@ app.use(express.json());
 // routes
 app.use('/api/notes', guard, require('./routes/notes'));
 app.use('/api/users', require('./routes/users'));
+
+
+app.use(express.static(path.join(__dirname, 'build')));
+
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 function guard(req, res, next) {
     const bearer = req.headers['authorization']
