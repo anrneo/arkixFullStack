@@ -9,6 +9,7 @@ export default class NotesList extends Component {
 
     state = {
         notes: [], 
+        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com/',
         user:''
     }
 
@@ -17,26 +18,31 @@ export default class NotesList extends Component {
     }
 
     getNotes = async () => {
-        const id =  localStorage.getItem('login_id')
-        const res = await axios.get(`http://localhost:4000/api/notes?id=${id}`, {
-            headers: {
-              Authorization: localStorage.getItem('token')
-            }
-           })
-        if (res.data===false) {
-           window.location.href = '/';
-            
+        if (localStorage.getItem('login_id')) {
+            const id =  localStorage.getItem('login_id')
+            const res = await axios.get(this.state.url+`/api/notes?id=${id}`, {
+                headers: {
+                    Authorization: localStorage.getItem('token')
+                }
+            })
+            if (res.data===false) {
+                window.location.href = '/';
+             }else{
+                 this.setState({
+                     notes: res.data,
+                     user : localStorage.getItem('email')
+                 });
+             }
         }else{
-            this.setState({
-                notes: res.data,
-                user : localStorage.getItem('email')
-            });
+            window.location.href = '/';
         }
+        
+       
         
     }
 
     deleteNote = async (noteId) => {
-        await axios.delete('http://localhost:4000/api/notes/' + noteId, {
+        await axios.delete(this.state.url+'/api/notes/' + noteId, {
             headers: {
               Authorization: localStorage.getItem('token')
             }
@@ -50,7 +56,7 @@ export default class NotesList extends Component {
                 {
                     this.state.notes.map(note => (
                         <div className="col-md-4 p-2" key={note._id}>
-                            <img className="card-img-top" src={note.imagen} alt="Card image"></img>
+                            <img className="card-img-top" src={note.imagen} alt="Card"></img>
                             <div className="card">
                                 
                                 <div className="card-header d-flex justify-content-between">

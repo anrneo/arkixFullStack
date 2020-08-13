@@ -2,15 +2,8 @@ import React, { Component } from 'react'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 import axios from 'axios'
-import { uploadFile } from 'react-s3';
 
-const config = {
-    bucketName: 'testnew123',
-    //dirName: 'testing/test1/', /* optional */
-    region: 'us-east-1',
-    accessKeyId: 'AKIAIDGLPACSWDKQYI2Q',
-    secretAccessKey: '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',
-}
+
 
 export default class CreateNote extends Component {
 
@@ -19,9 +12,11 @@ export default class CreateNote extends Component {
         content: '',
         imagen: '',
         pathfile: '',
+        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com/',
         date: new Date(),
         userSelected: '',
         users: [],
+        list: [],
         editing: false,
         _id: ''
     }
@@ -31,14 +26,25 @@ export default class CreateNote extends Component {
         if (!localStorage.getItem('token')) {
             window.location.href = '/';
         }else{
+
+            fetch(`https://pixabay.com/api/?key=13119377-fc7e10c6305a7de49da6ecb25`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.hits);
+          this.setState(
+            {list: data.hits}
+          );
+          console.log(this.state.list);
+          
+        })
+
             if (this.props.match.params.id) {
                 console.log(this.props.match.params.id)
-                const res = await axios.get('http://localhost:4000/api/notes/' + this.props.match.params.id, {
+                const res = await axios.get(this.state.url+'/api/notes/' + this.props.match.params.id, {
                     headers: {
                       Authorization: localStorage.getItem('token')
                     }
                    });
-                console.log(res.data)
                 this.setState({
                     title: res.data.title,
                     content: res.data.content,
@@ -59,9 +65,9 @@ export default class CreateNote extends Component {
                 content: this.state.content,
                 author: localStorage.getItem('login_id'),
                 date: this.state.date,
-                imagen: this.state.pathfile
+                imagen: this.state.imagen
             };
-            await axios.put('http://localhost:4000/api/notes/' + this.state._id, updatedNote, {
+            await axios.put(this.state.url+'/api/notes/' + this.state._id, updatedNote, {
                 headers: {
                   Authorization: localStorage.getItem('token')
                 }
@@ -72,9 +78,9 @@ export default class CreateNote extends Component {
                 content: this.state.content,
                 author: localStorage.getItem('login_id'),
                 date: this.state.date,
-                imagen: this.state.pathfile
+                imagen: this.state.imagen
             };
-            axios.post('http://localhost:4000/api/notes', newNote, {
+            axios.post(this.state.url+'/api/notes', newNote, {
                 headers: {
                   Authorization: localStorage.getItem('token')
                 }
@@ -90,16 +96,7 @@ export default class CreateNote extends Component {
         })
     }
 
-    onImageChange = async (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-       const file = await uploadFile(e.target.files[0], config)
-       this.setState({
-        pathfile: file.location
-        })
-    
-    }
+   
 
     onChangeDate = date => {
         this.setState({ date });
@@ -141,14 +138,19 @@ export default class CreateNote extends Component {
                         </div>
                           {/* Note Imagen */}
                           <div className="form-group">
-                            <input
-                                type="file"
-                                className="form-control"
-                                placeholder="Imagen"
-                                onChange={this.onImageChange}
-                                name="imagen"
+                                 <select className="form-control"  onChange={this.onInputChange} name="imagen"
                                 value={this.state.imagen}
-                                required />
+                                required>
+                                    <option>Selecciona la Imagen</option>
+                                    {
+                                        this.state.list.map(lis => (
+                                            <option value={lis.previewURL} key={lis.id}> 
+                                            {lis.previewURL}
+                                            </option>
+                                        ))
+                                    }
+                                    
+                                </select>
                         </div>
                         <button className="btn btn-primary">
                             Save <i className="material-icons">

@@ -8,6 +8,7 @@ export default class Login extends Component {
         name: '',
         email: '',
         password: '',
+        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com/',
         date: new Date(),
         userSelected: '',
         users: [],
@@ -16,31 +17,11 @@ export default class Login extends Component {
     }
 
     async componentDidMount() {
-       /*  const res = await axios.get('http://localhost:4000/api/users');
-        if (res.data.length > 0) {
-            this.setState({
-                users: res.data.map(user => user.username),
-                userSelected: res.data[0].username
-            })
-        }
-        if (this.props.match.params.id) {
-            console.log(this.props.match.params.id)
-            const res = await axios.get('http://localhost:4000/api/notes/' + this.props.match.params.id);
-            console.log(res.data)
-            this.setState({
-                title: res.data.title,
-                content: res.data.content,
-                date: new Date(res.data.date),
-                userSelected: res.data.author,
-                _id: res.data._id,
-                editing: true
-            });
-        } */
     }
 
     onSubmit = async (e) => {
         e.preventDefault();
-        const res = await axios.post('http://localhost:4000/api/users/login', {
+        const res = await axios.post(this.state.url+'/api/users/login', {
             email: this.state.email,
             password: this.state.password
         });

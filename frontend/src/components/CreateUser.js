@@ -7,6 +7,7 @@ export default class CreateUser extends Component {
         username: '',
         email: '',
         password: '',
+        url: (window.location.hostname === 'localhost') ? 'http://localhost:4000' :'https://arkixfullstack.herokuapp.com/',
         users: []
     }
 
@@ -15,7 +16,7 @@ export default class CreateUser extends Component {
     }
 
     getUsers = async () => {
-        const res = await axios.get('http://localhost:4000/api/users');
+        const res = await axios.get(this.state.url+'/api/users');
         this.setState({
             users: res.data
         });
@@ -29,7 +30,7 @@ export default class CreateUser extends Component {
 
     onSubmit = async (e) => {
         e.preventDefault();
-        const res = await axios.post('http://localhost:4000/api/users', {
+        const res = await axios.post(this.state.url+'/api/users', {
             username: this.state.username,
             email: this.state.email,
             password: this.state.password
@@ -46,7 +47,7 @@ export default class CreateUser extends Component {
     deleteUser = async (userId) => {
         const response = window.confirm('are you sure you want to delete it?');
         if (response) {
-            await axios.delete('http://localhost:4000/api/users/' + userId);
+            await axios.delete(this.state.url+'/api/users/' + userId);
             this.getUsers();
         }
     }
